@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-type Slots []byte
+type Slots []bool
 
 type SlotSlice struct {
 	Begin int
@@ -42,21 +42,17 @@ func (slice *SlotSlice) parse(s string) error {
 }
 
 func NewSlots() Slots {
-	s := make([]byte, TotalSlots)
-	for i := 0; i < TotalSlots; i++ {
-		s[i] = '-'
-	}
-	return s
+	return make([]bool, TotalSlots)
 }
 
 func (p Slots) Set(slot int) error {
 	if slot < 0 || slot >= TotalSlots {
 		return fmt.Errorf("slot %d out of range", slot)
 	}
-	if p[slot] == '*' {
+	if p[slot] {
 		return fmt.Errorf("slot %d already set", slot)
 	}
-	p[slot] = '*'
+	p[slot] = true
 	return nil
 }
 
@@ -64,25 +60,25 @@ func (p Slots) Unset(slot int) error {
 	if slot < 0 || slot >= TotalSlots {
 		return fmt.Errorf("slot %d out of range", slot)
 	}
-	if p[slot] == '-' {
+	if !p[slot] {
 		return fmt.Errorf("slot %d already unset", slot)
 	}
 
-	p[slot] = '-'
+	p[slot] = false
 	return nil
 }
 
 func (p Slots) IsSet(slot int) bool {
-	return p[slot] == '*'
+	return p[slot]
 }
 
 func (p Slots) IsUnset(slot int) bool {
-	return p[slot] == '-'
+	return !p[slot]
 }
 
 func (p Slots) IsEmpty() bool {
 	for _, s := range p {
-		if s == '*' {
+		if s {
 			return false
 		}
 	}
@@ -92,7 +88,7 @@ func (p Slots) IsEmpty() bool {
 
 func (p Slots) IsAllSet() bool {
 	for _, s := range p {
-		if s == '-' {
+		if !s {
 			return false
 		}
 	}
@@ -120,7 +116,7 @@ func (p Slots) SetSlotSlice(slotSlice string) error {
 func (p Slots) SlotsCount() int {
 	count := 0
 	for _, s := range p {
-		if s == '*' {
+		if s {
 			count++
 		}
 	}
@@ -135,7 +131,7 @@ func (p Slots) String() string {
 	start := 0
 
 	for i := 0; i < length; i++ {
-		if p[i] == '*' {
+		if p[i] {
 			if !inRange {
 				inRange = true
 				start = i
@@ -169,10 +165,10 @@ func (p Slots) Compare(other Slots) (bool, string) {
 	extraSlots := NewSlots()
 
 	for i := 0; i < TotalSlots; i++ {
-		if p[i] == '*' && other[i] == '-' {
-			extraSlots[i] = '*'
-		} else if p[i] == '-' && other[i] == '*' {
-			leakSlots[i] = '*'
+		if p[i] && !other[i] {
+			extraSlots[i] = true
+		} else if !p[i] && other[i] {
+			leakSlots[i] = true
 		}
 	}
 
