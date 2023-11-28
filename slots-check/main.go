@@ -22,7 +22,7 @@ func main() {
 
 	ctx := context.Background()
 
-	nodes, err := GetClusterNodes(ctx, os.Args[1])
+	nodes, err := rh.GetClusterNodes(ctx, os.Args[1])
 	if err != nil {
 		log.Fatalf("GetClusterNodes error: %s", err)
 	}
@@ -41,7 +41,7 @@ func main() {
 	var originNodes []*rh.ClusterNode
 	var origiNodeAddr string
 	for _, node := range masterNodes {
-		nodes, err := GetClusterNodes(ctx, node.Addr)
+		nodes, err := rh.GetClusterNodes(ctx, node.Addr)
 		if err != nil {
 			log.Fatalf("get cluster nodes of node:%s node_id:%s, err: %s", node.Addr, node.ID, err)
 		}
@@ -57,21 +57,6 @@ func main() {
 			fmt.Printf("compare nodes slots error: %s\n", err)
 		}
 	}
-}
-
-func GetClusterNodes(ctx context.Context, addr string) ([]*rh.ClusterNode, error) {
-	cli, err := rh.NewClient(ctx, addr, "", "")
-	if err != nil {
-		return nil, fmt.Errorf("new client. addr:%s, err:%s", addr, err)
-	}
-	defer cli.Close()
-
-	nodes, err := cli.GetClusterNodes(ctx)
-	if err != nil {
-		return nil, fmt.Errorf("get cluster nodes. addr:%s, err:%s", addr, err)
-	}
-
-	return nodes, nil
 }
 
 func GetNodeByID(id string, nodes []*rh.ClusterNode) *rh.ClusterNode {

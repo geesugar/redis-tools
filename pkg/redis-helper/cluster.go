@@ -1,6 +1,7 @@
 package rh
 
 import (
+	"context"
 	"fmt"
 	"strconv"
 	"strings"
@@ -217,4 +218,19 @@ func ExtractMyself(nodes []*ClusterNode) *ClusterNode {
 type ClusterInfo struct {
 	ID      string // this is node ID
 	MyEpoch int
+}
+
+func GetClusterNodes(ctx context.Context, addr string) ([]*ClusterNode, error) {
+	cli, err := NewClient(ctx, addr, "", "")
+	if err != nil {
+		return nil, fmt.Errorf("new client. addr:%s, err:%s", addr, err)
+	}
+	defer cli.Close()
+
+	nodes, err := cli.GetClusterNodes(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("get cluster nodes. addr:%s, err:%s", addr, err)
+	}
+
+	return nodes, nil
 }

@@ -15,7 +15,7 @@ type SlotSlice struct {
 
 func (slice *SlotSlice) parse(s string) error {
 	if s == "" {
-		return fmt.Errorf("input empty")
+		return nil
 	}
 
 	nums := strings.SplitN(s, "-", 2)
