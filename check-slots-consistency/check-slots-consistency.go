@@ -1,28 +1,32 @@
-// http://www.apache.org/licenses/LICENSE-2
-
-// 描述：通过对redis cluster各个节点调用cluster nodes命令，获取各个节点的slot分配情况，判断是否有节点slot分配不均匀的情况
-// 入参： redis cluster的ip和端口
-// 出参： 无
-
-package main
+package check_slots_consistency
 
 import (
-	"context"
 	"fmt"
 	"log"
-	"os"
 
 	rh "github.com/geesugar/redis-tools/pkg/redis-helper"
+	"github.com/spf13/cobra"
 )
 
-func main() {
-	if len(os.Args) < 2 {
-		log.Fatalf("Usage: %s ip:port", os.Args[0])
+var (
+	addr string
+)
+
+func NewCheckSlotsConsistencyCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use: "check-slots-consistency",
+		Run: Run,
 	}
 
-	ctx := context.Background()
+	cmd.Flags().StringVarP(&addr, "addr", "", "", "redis addr")
 
-	nodes, err := rh.GetClusterNodes(ctx, os.Args[1])
+	return cmd
+}
+
+func Run(cmd *cobra.Command, args []string) {
+	ctx := cmd.Context()
+
+	nodes, err := rh.GetClusterNodes(ctx, addr)
 	if err != nil {
 		log.Fatalf("GetClusterNodes error: %s", err)
 	}

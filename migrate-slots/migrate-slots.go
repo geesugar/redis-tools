@@ -1,13 +1,12 @@
-// Description: rebalance slot
-package main
+package migrate_slots
 
 import (
 	"context"
 	"fmt"
 	"log"
-	"os"
 
 	rh "github.com/geesugar/redis-tools/pkg/redis-helper"
+	"github.com/spf13/cobra"
 )
 
 const (
@@ -15,20 +14,26 @@ const (
 	MigrateTimeoutSecond = 300
 )
 
-func PrintUsage() {
-	fmt.Printf("Usage: %s ADDR NODEID SLOTS\n", os.Args[0])
-}
+var (
+	addr   string
+	nodeID string
+	slots  string
+)
 
-func main() {
-	if len(os.Args) < 4 {
-		PrintUsage()
-		os.Exit(1)
+func NewMigrationSlotsCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use: "migrate-slots",
+		Run: Run,
 	}
 
-	addr := os.Args[1]
-	nodeID := os.Args[2]
-	slots := os.Args[3]
+	cmd.Flags().StringVarP(&addr, "addr", "", "", "redis addr")
+	cmd.Flags().StringVarP(&nodeID, "node_id", "", "", "node id")
+	cmd.Flags().StringVarP(&slots, "slots", "", "", "slots")
 
+	return cmd
+}
+
+func Run(cmd *cobra.Command, args []string) {
 	fmt.Printf("addr:%s node:%s slots:%s\n", addr, nodeID, slots)
 
 	ctx := context.Background()

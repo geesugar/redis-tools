@@ -1,8 +1,0 @@
-go 1.21.0
-
-use (
-	./hash-slot-keys
-	./pkg
-	./check-slots-consistency
-	./migrate-slots
-)

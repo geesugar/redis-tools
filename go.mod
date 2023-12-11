@@ -1,10 +1,10 @@
-module github.com/geesugar/redis-tools/check-slots-consistency
+module github.com/geesugar/redis-tools
 
 go 1.21.0
 
 require (
-	github.com/geesugar/redis-tools/pkg v0.0.0-20231128083314-d3bc3a536a8c
-	github.com/go-redis/redis/v8 v8.11.5 // indirect
+	github.com/geesugar/redis-tools/pkg v0.0.0-20231130021846-93c8ef3924bf
+	github.com/spf13/cobra v1.8.0
 )
 
 require (
@@ -17,12 +17,14 @@ require (
 	github.com/go-openapi/jsonpointer v0.19.6 // indirect
 	github.com/go-openapi/jsonreference v0.20.2 // indirect
 	github.com/go-openapi/swag v0.22.3 // indirect
+	github.com/go-redis/redis/v8 v8.11.5 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/google/gnostic-models v0.6.8 // indirect
 	github.com/google/go-cmp v0.5.9 // indirect
 	github.com/google/gofuzz v1.2.0 // indirect
 	github.com/google/uuid v1.4.0 // indirect
+	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
@@ -34,6 +36,7 @@ require (
 	github.com/prometheus/client_model v0.4.1-0.20230718164431-9a2bf3000d16 // indirect
 	github.com/prometheus/common v0.44.0 // indirect
 	github.com/prometheus/procfs v0.11.1 // indirect
+	github.com/spf13/pflag v1.0.5 // indirect
 	golang.org/x/net v0.17.0 // indirect
 	golang.org/x/oauth2 v0.8.0 // indirect
 	golang.org/x/sys v0.13.0 // indirect
